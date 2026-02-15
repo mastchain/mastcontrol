@@ -82,7 +82,7 @@ WantedBy=multi-user.target"
         
         echo "MastRadar installed and started successfully."
     
-    
+        ;;
     start)
         echo "Starting MastRadar..."
         sudo systemctl start mastradar.service
