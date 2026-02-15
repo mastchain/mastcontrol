@@ -68,7 +68,7 @@ Description=MastRadar (Fork of AIS Catcher)
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/AIS-catcher -H https://api.mastchain.io/api/upload USERPWD ${token} INTERVAL 60 ${args}
+ExecStart=/usr/bin/AIS-catcher -H https://api.mastchain.io/api/upload USERPWD ${token} INTERVAL 60 ${args}
 Restart=always
 User=root
 
@@ -93,6 +93,14 @@ WantedBy=multi-user.target"
         echo "Stopping MastRadar..."
         sudo systemctl stop mastradar.service
         echo "mastradar stopped."
+        ;;
+    status)
+        echo "MastRadar service status:"
+        systemctl status mastradar.service --no-pager
+        ;;
+    log)
+        echo "Recent MastRadar logs:"
+        journalctl -u mastradar.service -n 100 --no-pager
         ;;
     *)
         echo "Usage: $0 {install|start|stop}"
