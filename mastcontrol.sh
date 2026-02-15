@@ -48,8 +48,9 @@ case "$1" in
         sudo apt install -y "/tmp/$FILE"
         echo "MastRadar/AIS-catcher installed successfully."
 
-        cp "$0" /usr/local/bin/mastcontrol
-        chmod +x /usr/local/bin/mastcontrol
+        SCRIPT_NAME="mastcontrol"
+        wget -O "/usr/local/bin/$SCRIPT_NAME" "https://raw.githubusercontent.com/mastchain/mastcontrol/refs/heads/main/mastcontrol.sh"
+        chmod +x "/usr/local/bin/$SCRIPT_NAME"
 
         echo "You can now use the 'mastcontrol' command to control the MastRadar service."
         echo "For example, to start the service, run 'mastcontrol start'."
