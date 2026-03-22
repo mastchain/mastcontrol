@@ -56,14 +56,14 @@ case "$1" in
 
         echo "MastRadar/AIS-catcher installed. Let's set it up."
         # Kick off configuration immediately after install
-        /usr/local/bin/mastcontrol configure </dev/tty
+        /usr/local/bin/mastcontrol configure
         ;;
     configure)
         echo "Configuring MastRadar (Fork of AIS Catcher)..."
         echo "Enter your USERPWD parameter for this station"
         echo "e.g. (email@domain.com:vzXhH9BQm3Ju2h+kQEispt9wOVA+H7wlOD0omNwgnjY=)"
-        read -p "USERPWD: " token
-        read -p "Any additional command line arguments for MastRadar/AIS-catcher (e.g. -N 8100): " args
+        read -p "USERPWD: " token </dev/tty
+        read -p "Any additional command line arguments for MastRadar/AIS-catcher (e.g. -N 8100): " args </dev/tty
 
         SERVICE_FILE_CONTENT="[Unit]
 Description=MastRadar (Fork of AIS Catcher)
