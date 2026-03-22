@@ -54,9 +54,9 @@ case "$1" in
             || { echo "Failed to download mastcontrol script"; exit 1; }
         chmod +x "/usr/local/bin/$SCRIPT_NAME"
 
-        echo "MastRadar/AIS-catcher installed. Let's set it up."        
+        echo "MastRadar/AIS-catcher installed. Let's set it up."
         # Kick off configuration immediately after install
-        "$0" configure
+        /usr/local/bin/mastcontrol configure
         ;;
     configure)
         echo "Configuring MastRadar (Fork of AIS Catcher)..."
@@ -88,7 +88,7 @@ WantedBy=multi-user.target"
             systemctl start mastradar.service
             echo "MastRadar installed and started successfully."
         fi
-        "$0" status
+        /usr/local/bin/mastcontrol status
         ;;
     start)
         echo "Starting MastRadar..."
