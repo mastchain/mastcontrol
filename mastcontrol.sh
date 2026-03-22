@@ -33,13 +33,14 @@ case "$1" in
 
         # Redirect non-available Ubuntu versions to closest LTS
         if [[ "$OS" == "ubuntu" && ! " ${AVAILABLE[@]} " =~ " $CODENAME " ]]; then
+            ORIGINAL_CODENAME="$CODENAME"
             # Simple mapping to nearest LTS
             case "$CODENAME" in
                 focal|kinetic) CODENAME="jammy" ;;
                 lunar) CODENAME="noble" ;;
-                *) CODENAME="plucky" ;; 
+                *) CODENAME="plucky" ;;
             esac
-            echo "Redirecting $OS $CODENAME to nearest LTS build: $CODENAME"
+            echo "Redirecting $OS $ORIGINAL_CODENAME to nearest LTS build: $CODENAME"
         fi
 
         FILE="ais-catcher_${OS}_${CODENAME}_${ARCH_SUFFIX}.deb"
@@ -49,7 +50,8 @@ case "$1" in
         echo "MastRadar/AIS-catcher installed successfully."
 
         SCRIPT_NAME="mastcontrol"
-        wget -O "/usr/local/bin/$SCRIPT_NAME" "https://raw.githubusercontent.com/mastchain/mastcontrol/refs/heads/main/mastcontrol.sh"
+        wget -O "/usr/local/bin/$SCRIPT_NAME" "https://raw.githubusercontent.com/mastchain/mastcontrol/refs/heads/main/mastcontrol.sh" \
+            || { echo "Failed to download mastcontrol script"; exit 1; }
         chmod +x "/usr/local/bin/$SCRIPT_NAME"
 
         echo "MastRadar/AIS-catcher installed. Let's set it up."        
@@ -75,6 +77,8 @@ User=root
 [Install]
 WantedBy=multi-user.target"
 
+        echo "$SERVICE_FILE_CONTENT" > /etc/systemd/system/mastradar.service
+        systemctl daemon-reload
         systemctl enable mastradar.service
 
         if systemctl is-active --quiet mastradar.service; then
@@ -88,12 +92,12 @@ WantedBy=multi-user.target"
         ;;
     start)
         echo "Starting MastRadar..."
-        sudo systemctl start mastradar.service
+        systemctl start mastradar.service
         echo "mastradar started."
         ;;
     stop)
         echo "Stopping MastRadar..."
-        sudo systemctl stop mastradar.service
+        systemctl stop mastradar.service
         echo "mastradar stopped."
         ;;
     status)
