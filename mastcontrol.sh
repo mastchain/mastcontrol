@@ -84,6 +84,7 @@ User=root
 [Install]
 WantedBy=multi-user.target"
 
+        echo -e "${BLUE}Creating systemd service file...${NC}"
         echo "$SERVICE_FILE_CONTENT" > /etc/systemd/system/mastradar.service
         systemctl daemon-reload
         systemctl enable mastradar.service
