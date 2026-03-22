@@ -56,7 +56,7 @@ case "$1" in
 
         echo "MastRadar/AIS-catcher installed. Let's set it up."
         # Kick off configuration immediately after install
-        /usr/local/bin/mastcontrol configure
+        /usr/local/bin/mastcontrol configure </dev/tty
         ;;
     configure)
         echo "Configuring MastRadar (Fork of AIS Catcher)..."
