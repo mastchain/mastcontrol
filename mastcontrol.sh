@@ -71,7 +71,7 @@ case "$1" in
         read token </dev/tty
         printf "${MAGENTA}Any additional command line arguments for MastRadar/AIS-catcher (e.g. -N 8100): ${NC}" >/dev/tty
         read args </dev/tty
-        printf "${BLUE}Creating systemd service file...${NC}" >/dev/tty
+        
         SERVICE_FILE_CONTENT="[Unit]
 Description=MastRadar (Fork of AIS Catcher)
 After=network.target
