@@ -52,9 +52,9 @@ case "$1" in
         wget -O "/usr/local/bin/$SCRIPT_NAME" "https://raw.githubusercontent.com/mastchain/mastcontrol/refs/heads/main/mastcontrol.sh"
         chmod +x "/usr/local/bin/$SCRIPT_NAME"
 
-        echo "You can now use the 'mastcontrol' command to control the MastRadar service."
-        echo "For example, to start the service, run 'mastcontrol start'."
-        echo "To stop the service, run 'mastcontrol stop'."
+        echo "MastRadar/AIS-catcher installed. Let's set it up."        
+        # Kick off configuration immediately after install
+        "$0" configure
         ;;
     configure)
         echo "Configuring MastRadar (Fork of AIS Catcher)..."
@@ -75,14 +75,16 @@ User=root
 [Install]
 WantedBy=multi-user.target"
 
-        echo "Setting things up..."
-        echo "$SERVICE_FILE_CONTENT" > /etc/systemd/system/mastradar.service
-        systemctl daemon-reload
         systemctl enable mastradar.service
-        systemctl start mastradar.service
-        
-        echo "MastRadar installed and started successfully."
-    
+
+        if systemctl is-active --quiet mastradar.service; then
+            systemctl restart mastradar.service
+            echo "MastRadar restarted successfully."
+        else
+            systemctl start mastradar.service
+            echo "MastRadar installed and started successfully."
+        fi
+        "$0" status
         ;;
     start)
         echo "Starting MastRadar..."
@@ -102,8 +104,29 @@ WantedBy=multi-user.target"
         echo "Recent MastRadar logs:"
         journalctl -u mastradar.service -n 100 --no-pager
         ;;
+    update)
+        echo "Updating mastcontrol..."
+        wget -O "/usr/local/bin/mastcontrol" "https://raw.githubusercontent.com/mastchain/mastcontrol/refs/heads/main/mastcontrol.sh" \
+            || { echo "Failed to download update."; exit 1; }
+        chmod +x "/usr/local/bin/mastcontrol"
+        echo "mastcontrol updated successfully."
+        echo "Version info:"
+        head -3 /usr/local/bin/mastcontrol
+        ;;
     *)
-        echo "Usage: $0 {install|start|stop}"
+        echo ""
+        echo "Usage: $0 {install|configure|update|start|stop|status|log}"
+        echo ""
+        echo "Commands:"
+        echo "  install    - Download and install MastRadar and this control script"
+        echo "  configure  - Set your station credentials and start the service"
+        echo "               (automatically runs after install)"
+        echo "  update     - Update this control script to the latest version"
+        echo "  start      - Start the MastRadar service"
+        echo "  stop       - Stop the MastRadar service"
+        echo "  status     - Show current service status"
+        echo "  log        - Show the last 100 lines of service logs"
+        echo ""
         exit 1
         ;;
 esac
