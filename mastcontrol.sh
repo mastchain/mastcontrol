@@ -67,6 +67,7 @@ case "$1" in
         echo -e "${BLUE}Configuring MastRadar (Fork of AIS Catcher)...${NC}"
         echo -e "${BLUE}Enter your USERPWD parameter for this station${NC}"
         echo -e "${BLUE}e.g. (email@domain.com:vzXhH9BQm3Ju2h+kQEispt9wOVA+H7wlOD0omNwgnjY=)${NC}"
+        stty sane </dev/tty 2>/dev/null || true
         printf "${MAGENTA}USERPWD: ${NC}" >/dev/tty
         read token </dev/tty
         printf "${MAGENTA}Any additional command line arguments for MastRadar/AIS-catcher (e.g. -N 8100): ${NC}" >/dev/tty
